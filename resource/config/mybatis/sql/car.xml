@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace和定义的Mapper接口对应，并实现其中的方法 -->
+<mapper namespace="com.suminghui.bycar.dao.UserDao">
+
+    <sql id="CAR_PARAMS">
+         brand AS brand,
+         model AS model,
+         configuration AS configuration,
+         original_price AS originalPrice,
+         used_year AS usedYear,
+         now_price AS nowPrice,
+         sellerID AS sellerID,
+         buyerID AS buyerID,
+         image0 AS image0,
+         image1 AS image1,
+         image2 AS image2,
+         image3 AS image3,
+         image4 AS image4,
+         Id AS id
+    </sql>
+
+    <insert id="insertCar" parameterType="com.suminghui.bycar.bean.Car">
+        INSERT INTO
+          car(brand, model, configuration, original_price, used_year, now_price, sellerID, buyerID, image0, image1, image2, image3, image4)
+        VALUES     
+          (#{brand}, #{model}, #{configuration}, #{originalPrice}, #{usedYear}, #{nowPrice}, #{sellerID}, #{buyerID}, #{image0}, #{image1}, #{image2}, #{image3}, #{image4})
+    </insert>
+
+    <update id="updateCar" parameterType="com.suminghui.bycar.bean.Car">
+     UPDATE
+         car
+      SET
+          brand = #{brand},
+          model = #{model},
+          configuration = #{configuration},
+          original_price = #{originalPrice},
+          used_year = #{usedYear},
+          now_price = #{nowPrice},
+          sellerID = #{sellerID},
+          buyerID = #{buyerID},
+          image0 = #{image0},
+          image1 = #{image1},
+          image2 = #{image2},
+          image3 = #{image3},
+          image4 = #{image4}
+      WHERE
+          Id = #{id}
+    </update>
+    <select id="selectCarList" parameterType="com.suminghui.bycar.bean.Pagination" resultType="com.suminghui.bycar.bean.Car">
+        SELECT
+        <include refid="CAR_PARAMS"/>
+        FROM
+          car
+        ORDER BY Id DESC LIMIT #{offset}, #{pageSize}
+    </select>
+    <select id="getTotalCount" resultType="java.lang.Integer">
+         SELECT
+           COUNT(Id)
+         FROM
+           car
+    </select>
+    <select id="selectCarById" parameterType="java.lang.Integer" resultType="com.suminghui.bycar.bean.Car">
+         SELECT
+           <include refid="CAR_PARAMS"/>
+         FROM
+           car
+         WHERE
+           Id = #{carId}
+    </select>
+    <delete id="deleteCar" parameterType="java.lang.Integer">
+         DELETE FROM car WHERE Id = #{carId}
+    </delete>
+</mapper>

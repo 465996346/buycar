@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 配置数据连接池 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="user" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        
+        <property name="maxPoolSize" value="20" />
+        <property name="minPoolSize" value="5" />
+        <property name="acquireIncrement" value="3" />
+        <property name="initialPoolSize" value="5"></property>
+    </bean>
+	
+	<!-- 配置SqlSessionFactoryBean -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:config/mybatis/mybatis.xml"/>
+        <!-- mapper和resultmap配置路径
+        <property name="mapperLocations">
+            <list>
+               	 表示在com.hoo.resultmap包或以下所有目录中，以-resultmap.xml结尾所有文件 
+                <value>classpath:com/hoo/resultmap/**/*-resultmap.xml</value>
+                <value>classpath:com/hoo/entity/*-resultmap.xml</value>
+                <value>classpath:com/hoo/mapper/**/*-mapper.xml</value>
+            </list>
+        </property> -->
+    </bean>
+    
+    <!-- 定义事务管理器（声明式的事务）--> 
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+</beans>
